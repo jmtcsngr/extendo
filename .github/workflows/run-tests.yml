@@ -15,6 +15,9 @@ jobs:
       SINGULARITY_VERSION: "4.2.2"
 
     strategy:
+      # Run every matrix job to completion; do not cancel the others when one
+      # fails, so results across all iRODS/baton combinations are visible.
+      fail-fast: false
       matrix:
         include:
           - irods: "4.2.7"
@@ -27,6 +30,24 @@ jobs:
             experimental: false
           - irods: "4.3.5"
             client_image: "ghcr.io/wtsi-npg/ub-22.04-irods-clients-4.3.5:latest"
+            server_image: "ghcr.io/wtsi-npg/ub-22.04-irods-4.3.5:latest"
+            experimental: false
+          # baton ships in the client image, so its version is pinned via the
+          # image tag: :9.4 ships baton 6.0.0, while :latest ships 6.1.0 (which
+          # added the replicate physical_path field).
+          - irods: "4.2.7"
+            baton: "6.0.0"
+            client_image: "ghcr.io/wtsi-npg/ub-16.04-irods-clients-4.2.7:9.4"
+            server_image: "ghcr.io/wtsi-npg/ub-16.04-irods-4.2.7:latest"
+            experimental: false
+          - irods: "4.3.4"
+            baton: "6.0.0"
+            client_image: "ghcr.io/wtsi-npg/ub-22.04-irods-clients-4.3.4:9.4"
+            server_image: "ghcr.io/wtsi-npg/ub-22.04-irods-4.3.4:latest"
+            experimental: false
+          - irods: "4.3.5"
+            baton: "6.0.0"
+            client_image: "ghcr.io/wtsi-npg/ub-22.04-irods-clients-4.3.5:9.4"
             server_image: "ghcr.io/wtsi-npg/ub-22.04-irods-4.3.5:latest"
             experimental: false
 
